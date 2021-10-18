@@ -3,7 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logopolis.ImageTools.Api", "Logopolis.ImageTools.Api\Logopolis.ImageTools.Api.csproj", "{854A656E-4F7E-42C7-945C-87970A7E02C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logopolis.ImageTools.Api", "Logopolis.ImageTools.Api\Logopolis.ImageTools.Api.csproj", "{854A656E-4F7E-42C7-945C-87970A7E02C6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{475E7026-0628-48B8-AAC4-738AAE0E0D93} = {475E7026-0628-48B8-AAC4-738AAE0E0D93}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "APIs", "APIs", "{B2A80858-ABDD-490F-8B80-F399FAEB4910}"
 EndProject
@@ -11,7 +14,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Application", "Application"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageProcessing", "ImageProcessing", "{9DFC4973-0968-46E8-8B94-600D6DD92BB4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logopolis.ImageTools.ImageProcessing.Domain", "Logopolis.ImageTools.ImageProcessing.Domain\Logopolis.ImageTools.ImageProcessing.Domain.csproj", "{475E7026-0628-48B8-AAC4-738AAE0E0D93}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logopolis.ImageTools.ImageProcessing.Domain", "Logopolis.ImageTools.ImageProcessing.Domain\Logopolis.ImageTools.ImageProcessing.Domain.csproj", "{475E7026-0628-48B8-AAC4-738AAE0E0D93}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logopolis.ImageTools.ImageProcessing.Service", "Logopolis.ImageTools.ImageProcessing.Service\Logopolis.ImageTools.ImageProcessing.Service.csproj", "{5869A017-7C20-4AB0-888C-F4438D7AF475}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +32,10 @@ Global
 		{475E7026-0628-48B8-AAC4-738AAE0E0D93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{475E7026-0628-48B8-AAC4-738AAE0E0D93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{475E7026-0628-48B8-AAC4-738AAE0E0D93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5869A017-7C20-4AB0-888C-F4438D7AF475}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5869A017-7C20-4AB0-888C-F4438D7AF475}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5869A017-7C20-4AB0-888C-F4438D7AF475}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5869A017-7C20-4AB0-888C-F4438D7AF475}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -35,6 +44,7 @@ Global
 		{854A656E-4F7E-42C7-945C-87970A7E02C6} = {B2A80858-ABDD-490F-8B80-F399FAEB4910}
 		{9DFC4973-0968-46E8-8B94-600D6DD92BB4} = {1357BB5E-6EFA-4014-A92D-EB80E751D473}
 		{475E7026-0628-48B8-AAC4-738AAE0E0D93} = {9DFC4973-0968-46E8-8B94-600D6DD92BB4}
+		{5869A017-7C20-4AB0-888C-F4438D7AF475} = {9DFC4973-0968-46E8-8B94-600D6DD92BB4}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E94106E0-7DD4-4AD2-AA08-F8826E46D420}

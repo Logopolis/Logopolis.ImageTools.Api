@@ -6,6 +6,7 @@ namespace Logopolis.ImageTools.Api.Controllers
     public class PingController : ControllerBase
     {
         [Route("ping")]
+        [HttpGet]
         public IActionResult Index()
         {
             return new OkObjectResult("Hello from Logopolis Image Tools");

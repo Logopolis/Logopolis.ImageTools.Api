@@ -8,5 +8,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Logopolis.ImageTools.ImageProcessing.Domain\Logopolis.ImageTools.ImageProcessing.Domain.csproj" />
+    <ProjectReference Include="..\Logopolis.ImageTools.ImageProcessing.Service\Logopolis.ImageTools.ImageProcessing.Service.csproj" />
+  </ItemGroup>
+
 
 </Project>
