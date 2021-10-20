@@ -11,6 +11,10 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
         private Bitmap _bitmap;
         private ImageFormat _imageFormat;
 
+        public int Width => _image.Width;
+        public int Height => _image.Height;
+        public double Ratio => _image.Width / Height;
+
         protected LogopolisImage(Image image)
         {
             _image = image;
@@ -20,13 +24,22 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
         {
             _image.Dispose();
             _image = image;
-            _imageFormat = image.RawFormat;
         }
 
         public static LogopolisImage FromStream(Stream stream)
         {
             var image = Image.FromStream(stream);
-            return new LogopolisImage(image);
+            return new LogopolisImage(image)
+            {
+                _imageFormat = image.RawFormat
+            };
+        }
+
+        public void Resize(int height, int width)
+        {
+            _bitmap?.Dispose();
+            _bitmap = new Bitmap(_image, width, height);
+            SetImage(_bitmap);
         }
 
         public Stream ToStream()
@@ -44,6 +57,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
         public void Dispose()
         {
             _image.Dispose();
+            _bitmap.Dispose();
         }
     }
 }
