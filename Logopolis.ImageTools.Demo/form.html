@@ -4,13 +4,13 @@
     </head>
 <body>
     <h1>ImageTools Demo</h1>
-    <form action="/" method="POST" enctype="multipart/form-data">
+    <form action="http://localhost:51920/image/resize" method="POST" enctype="multipart/form-data">
         <label for="width">Width</label>
-        <input id="width" name="width" type="number" />
+        <input id="width" name="maxWidth" type="number" />
         <label for="height">Height</label>
-        <input id="height" name="height" type="number" />
+        <input id="height" name="maxHeight" type="number" />
         <label for="file">File</label>
-        <input id="file" type="file" name="imageFile" />
+        <input id="file" type="file" name="image" />
         <button type="submit">Send to Api</button>
     </form>
 </body>

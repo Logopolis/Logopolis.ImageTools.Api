@@ -1,5 +1,6 @@
 using Logopolis.ImageTools.ImageProcessing.Domain.ServiceInterfaces;
 using Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeImage;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -44,6 +45,12 @@ namespace Logopolis.ImageTools.Api
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.)
+            app.UseSwaggerUI();
 
             app.UseEndpoints(endpoints =>
             {

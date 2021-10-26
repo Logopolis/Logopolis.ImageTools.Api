@@ -15,6 +15,14 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
         public int Height => _image.Height;
         public double Ratio => _image.Width / Height;
 
+        public string ContentType =>
+            SupportedImageFormat.GetByImageFormat(_imageFormat)
+                .ContentType;
+
+        public string FileExtension =>
+            SupportedImageFormat.GetByImageFormat(_imageFormat)
+                .FileExtension;
+
         protected LogopolisImage(Image image)
         {
             _image = image;
@@ -49,15 +57,15 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
                 return null;
             }
 
-            using var outStream = new MemoryStream();
+            var outStream = new MemoryStream();
             _bitmap.Save(outStream, _imageFormat); 
             return outStream;
         }
 
         public void Dispose()
         {
-            _image.Dispose();
-            _bitmap.Dispose();
+            //_image.Dispose();
+            //_bitmap.Dispose();
         }
     }
 }

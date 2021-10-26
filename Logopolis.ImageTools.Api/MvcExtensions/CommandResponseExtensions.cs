@@ -6,13 +6,14 @@ namespace Logopolis.ImageTools.Api.MvcExtensions
 {
     public static class CommandResponseExtensions
     {
-        public static IActionResult ToActionResult(this CommandResponse response)
+        public static IActionResult ToActionResult(this CommandResponse response, ControllerBase controller)
         {
             if (response.IsStream)
             {
-                return new FileStreamResult(response.ResponseStream, response.ContentType);
+                var stream = response.GetResponseStream();
+                stream.Position = 0;
+                return controller.File(stream, response.ContentType, response.FileName);
             }
-
 
             if (response.IsNotFound)
             {

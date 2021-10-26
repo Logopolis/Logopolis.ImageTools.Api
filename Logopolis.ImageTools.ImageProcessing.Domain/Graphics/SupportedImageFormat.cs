@@ -44,6 +44,6 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
             .FirstOrDefault(f => f.FileExtension == extension);
 
         public static SupportedImageFormat GetByImageFormat(ImageFormat imageFormat) => _allFormats
-            .FirstOrDefault(f => f.ImageFormat == imageFormat);
+            .FirstOrDefault(f => f.ImageFormat.Guid == imageFormat.Guid);
     }
 }

@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
 {
@@ -14,15 +15,16 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
         public string Message { get; set; }
 
         public dynamic ResponseBody { get; set; }
-        public Stream ResponseStream { get; set; }
+        public Func<Stream> GetResponseStream { get; set; }
         public string ContentType { get; private set; }
+        public string FileName { get; private set; }
 
         public CommandResponse(bool isSuccess)
         {
             IsSuccess = isSuccess;
         }
 
-        public CommandResponse NotFound()
+        public static CommandResponse NotFound()
         {
             return new CommandResponse(false)
             {
@@ -30,7 +32,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
             };
         }
 
-        public CommandResponse BadRequest()
+        public static CommandResponse BadRequest()
         {
             return new CommandResponse(false)
             {
@@ -38,7 +40,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
             };
         }
 
-        public CommandResponse Conflict()
+        public static CommandResponse Conflict()
         {
             return new CommandResponse(false)
             {
@@ -46,7 +48,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
             };
         }
 
-        public CommandResponse Forbidden()
+        public static CommandResponse Forbidden()
         {
             return new CommandResponse(false)
             {
@@ -54,13 +56,17 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
             };
         }
 
-        public CommandResponse Stream(Stream stream, string contentType)
+        public static CommandResponse Stream(
+            Func<Stream> getStream,
+            string contentType,
+            string fileName)
         {
             return new CommandResponse(true)
             { 
                 IsStream = true,
-                ResponseStream = stream,
-                ContentType = contentType // Todo: Set these up as static values
+                GetResponseStream = getStream,
+                ContentType = contentType,
+                FileName = fileName
             };
         }
     }
