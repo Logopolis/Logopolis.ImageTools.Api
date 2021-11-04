@@ -35,8 +35,8 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Commands
 
         /// <summary>
         /// Only when absolute_height and absolute_width are supplied.
-        /// Defaults to true.
+        /// Defaults to false.
         /// </summary>
-        public bool? Crop { get; set; } = true;
+        public bool? Crop { get; set; } = false;
     }
 }

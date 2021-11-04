@@ -15,7 +15,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
         public string Message { get; set; }
 
         public dynamic ResponseBody { get; set; }
-        public Func<Stream> GetResponseStream { get; set; }
+        public Stream ResponseStream { get; set; }
         public string ContentType { get; private set; }
         public string FileName { get; private set; }
 
@@ -57,14 +57,14 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
         }
 
         public static CommandResponse Stream(
-            Func<Stream> getStream,
+            Stream stream,
             string contentType,
             string fileName)
         {
             return new CommandResponse(true)
             { 
                 IsStream = true,
-                GetResponseStream = getStream,
+                ResponseStream = stream,
                 ContentType = contentType,
                 FileName = fileName
             };

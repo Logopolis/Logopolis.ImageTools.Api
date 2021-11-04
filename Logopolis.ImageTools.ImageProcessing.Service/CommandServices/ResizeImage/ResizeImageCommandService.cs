@@ -56,10 +56,72 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                     .WithMessage("Please supply image data");
             }
 
-            LogopolisImage image;
+            //LogopolisImage image;
             try
             {
-                image = LogopolisImage.FromStream(command.Image);
+                using var image = LogopolisImage.FromStream(command.Image);
+
+                // IF CROPPING HANDLE SEPARATELY
+                if(crop)
+                {
+                    return ResizeWithCrop(command.AbsoluteHeight.Value, command.AbsoluteWidth.Value, image);
+                }
+
+                // ABSOLUTE CASES
+                if(command.AbsoluteHeight.HasNonZeroPositiveValue() && !command.AbsoluteWidth.HasNonZeroPositiveValue())
+                {
+                    image.Resize(
+                        command.AbsoluteHeight.Value,
+                        (int)(command.AbsoluteHeight * image.Ratio));
+                }
+                else if(command.AbsoluteHeight.HasNonZeroPositiveValue() && command.AbsoluteWidth.HasNonZeroPositiveValue())
+                {
+                    image.Resize(
+                        command.AbsoluteHeight.Value,
+                        command.AbsoluteWidth.Value);
+                }
+                else if(command.AbsoluteWidth.HasNonZeroPositiveValue()) // command.AbsoluteHeight is not supplied
+                {
+                    image.Resize(
+                        (int)(command.AbsoluteWidth / image.Ratio),
+                        command.AbsoluteWidth.Value);
+                }
+
+                // MAX CASES
+                else if(command.MaxHeight.HasNonZeroPositiveValue() && command.MaxWidth.HasNonZeroPositiveValue())
+                {
+                    if(command.MaxWidth > (command.MaxHeight * image.Ratio))
+                    {
+                        // the max height is what constrains the image
+                        image.Resize(
+                            command.MaxHeight.Value,
+                            (int)(command.MaxHeight.Value * image.Ratio));
+                    }
+                    else
+                    {
+                        // the max width is what constrains the image
+                        image.Resize(
+                            (int)(command.MaxWidth.Value / image.Ratio),
+                            command.MaxWidth.Value);
+                    }
+                }
+                else if(command.MaxWidth.HasNonZeroPositiveValue()) // command.MaxHeight is not supplied
+                {
+                    image.Resize(
+                        (int)(command.MaxWidth.Value / image.Ratio),
+                        command.MaxWidth.Value);
+                }
+                else if(command.MaxHeight.HasNonZeroPositiveValue()) // command.MaxWidth is not supplied
+                {
+                    image.Resize(
+                        command.MaxHeight.Value,
+                        (int)(command.MaxHeight.Value * image.Ratio));
+                }
+
+                return CommandResponse.Stream(
+                    image.ToStream(), 
+                    image.ContentType, 
+                    $"{Guid.NewGuid()}.{image.FileExtension}");
             }
             catch
             {
@@ -67,70 +129,6 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                     .BadRequest()
                     .WithMessage("Please supply valid image data in png, jpeg, gif or bmp format.");
             }
-
-            // IF CROPPING HANDLE SEPARATELY
-            if(crop)
-            {
-                return ResizeWithCrop(command.AbsoluteHeight.Value, command.AbsoluteWidth.Value, image);
-            }
-
-            // ABSOLUTE CASES
-            if(command.AbsoluteHeight.HasNonZeroPositiveValue() && !command.AbsoluteWidth.HasNonZeroPositiveValue())
-            {
-                image.Resize(
-                    command.AbsoluteHeight.Value,
-                    (int)(command.AbsoluteHeight * image.Ratio));
-            }
-            else if(command.AbsoluteHeight.HasNonZeroPositiveValue() && command.AbsoluteWidth.HasNonZeroPositiveValue())
-            {
-                image.Resize(
-                    command.AbsoluteHeight.Value,
-                    command.AbsoluteWidth.Value);
-            }
-            else if(command.AbsoluteWidth.HasNonZeroPositiveValue()) // command.AbsoluteHeight is not supplied
-            {
-                image.Resize(
-                    (int)(command.AbsoluteWidth / image.Ratio),
-                    command.AbsoluteWidth.Value);
-            }
-
-            // MAX CASES
-            else if(command.MaxHeight.HasNonZeroPositiveValue() && command.MaxWidth.HasNonZeroPositiveValue())
-            {
-                if(command.MaxWidth > (command.MaxHeight * image.Ratio))
-                {
-                    // the max height is what constrains the image
-                    image.Resize(
-                        command.MaxHeight.Value,
-                        (int)(command.MaxHeight.Value * image.Ratio));
-                }
-                else
-                {
-                    // the max width is what constrains the image
-                    image.Resize(
-                        (int)(command.MaxWidth.Value / image.Ratio),
-                        command.MaxWidth.Value);
-                }
-            }
-            else if(command.MaxWidth.HasNonZeroPositiveValue()) // command.MaxHeight is not supplied
-            {
-                image.Resize(
-                    (int)(command.MaxWidth.Value / image.Ratio),
-                    command.MaxWidth.Value);
-            }
-            else if(command.MaxHeight.HasNonZeroPositiveValue()) // command.MaxWidth is not supplied
-            {
-                image.Resize(
-                    command.MaxHeight.Value,
-                    (int)(command.MaxHeight.Value * image.Ratio));
-            }
-            //TODO: learn to crop
-            //TODO: add an easypeasy Thumbnail endpoint
-           
-            return CommandResponse.Stream(
-                image.ToStream, 
-                image.ContentType, 
-                $"{Guid.NewGuid()}.{image.FileExtension}");
         }
 
         private CommandResponse ResizeWithCrop(int height, int width, LogopolisImage image)
@@ -155,11 +153,11 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                 var resizeRatio = (decimal)width / (decimal)image.Width;
                 var resizedHeight = (int)(resizeRatio * image.Height);
                 image.Resize(resizedHeight, width);
-                image.Crop(new Rectangle(resizedHeight / 2 - width / 2, 0, width, height));
+                image.Crop(new Rectangle(0, resizedHeight / 2 - height / 2, width, height));
             }
 
             return CommandResponse.Stream(
-                image.ToStream,
+                image.ToStream(),
                 image.ContentType,
                 $"{Guid.NewGuid()}.{image.FileExtension}");
         }

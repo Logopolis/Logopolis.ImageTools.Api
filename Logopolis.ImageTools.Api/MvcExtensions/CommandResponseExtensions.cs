@@ -10,7 +10,7 @@ namespace Logopolis.ImageTools.Api.MvcExtensions
         {
             if (response.IsStream)
             {
-                var stream = response.GetResponseStream();
+                var stream = response.ResponseStream;
                 stream.Position = 0;
                 return controller.File(stream, response.ContentType, response.FileName);
             }

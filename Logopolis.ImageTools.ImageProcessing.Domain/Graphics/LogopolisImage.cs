@@ -72,8 +72,7 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
 
         public void Dispose()
         {
-            //_image.Dispose();
-            //_bitmap.Dispose();
+            _image.Dispose();
         }
     }
 }
