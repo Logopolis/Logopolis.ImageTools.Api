@@ -69,5 +69,11 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Core
                 FileName = fileName
             };
         }
+
+        public CommandResponse WithMessage(string message)
+        {
+            Message = message;
+            return this;
+        }
     }
 }

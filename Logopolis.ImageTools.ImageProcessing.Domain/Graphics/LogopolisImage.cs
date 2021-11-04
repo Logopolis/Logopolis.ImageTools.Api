@@ -8,12 +8,15 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
     public class LogopolisImage : IDisposable
     {
         private Image _image;
-        private Bitmap _bitmap;
         private ImageFormat _imageFormat;
 
         public int Width => _image.Width;
         public int Height => _image.Height;
-        public double Ratio => _image.Width / Height;
+        
+        /// <summary>
+        /// Width divided by height e.g. 4 by 3 = 1.33
+        /// </summary>
+        public decimal Ratio => (decimal)_image.Width / (decimal)Height;
 
         public string ContentType =>
             SupportedImageFormat.GetByImageFormat(_imageFormat)
@@ -45,20 +48,25 @@ namespace Logopolis.ImageTools.ImageProcessing.Domain.Graphics
 
         public void Resize(int height, int width)
         {
-            _bitmap?.Dispose();
-            _bitmap = new Bitmap(_image, width, height);
-            SetImage(_bitmap);
+            var bitmap = new Bitmap(_image, width, height);
+            SetImage(bitmap);
+        }
+
+        public void Crop(Rectangle cropArea)
+        {
+            var bitmap = new Bitmap(_image);
+            SetImage(bitmap.Clone(cropArea, bitmap.PixelFormat));
         }
 
         public Stream ToStream()
         { 
-            if(_bitmap == null)
+            if(_image == null)
             {
                 return null;
             }
 
             var outStream = new MemoryStream();
-            _bitmap.Save(outStream, _imageFormat); 
+            _image.Save(outStream, _imageFormat); 
             return outStream;
         }
 

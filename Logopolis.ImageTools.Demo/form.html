@@ -5,12 +5,30 @@
 <body>
     <h1>ImageTools Demo</h1>
     <form action="http://localhost:51920/image/resize" method="POST" enctype="multipart/form-data">
-        <label for="width">Width</label>
-        <input id="width" name="maxWidth" type="number" />
-        <label for="height">Height</label>
-        <input id="height" name="maxHeight" type="number" />
-        <label for="file">File</label>
-        <input id="file" type="file" name="image" />
+        <div>
+            <label for="maxWidth">Max Width</label>
+            <input id="maxWidth" name="maxWidth" type="number" />
+        </div>
+        <div>
+            <label for="maxHeight">Max Height</label>
+            <input id="maxHeight" name="maxHeight" type="number" />
+        </div>
+        <div>
+            <label for="absoluteWidth">Absolute Width</label>
+            <input id="absoluteWidth" name="absoluteWidth" type="number" />
+        </div>
+        <div>
+            <label for="absoluteHeight">Absolute Height</label>
+            <input id="absoluteHeight" name="absoluteHeight" type="number" />
+        </div>
+        <div>
+            <label for="crop">Crop</label>
+            <input id="crop" name="crop" type="checkbox" />
+        </div>
+        <div>
+            <label for="image">Image</label>
+            <input id="image" type="file" name="image" />
+        </div>
         <button type="submit">Send to Api</button>
     </form>
 </body>
