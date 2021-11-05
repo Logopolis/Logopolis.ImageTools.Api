@@ -11,6 +11,8 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
 {
     public class ResizeImageCommandService : IResizeImageCommandService
     {
+        public const int MAX_DIMENSION = 4000;
+
         public CommandResponse Execute(ResizeImageCommand command)
         {
             // Validate command:
@@ -25,6 +27,17 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                 return CommandResponse
                     .BadRequest()
                     .WithMessage("Please supply a width / height parameter.");
+            }
+
+            if(
+                command.MaxHeight > MAX_DIMENSION
+                || command.MaxWidth > MAX_DIMENSION
+                || command.AbsoluteHeight > MAX_DIMENSION
+                || command.AbsoluteWidth > MAX_DIMENSION)
+            {
+                return CommandResponse
+                    .BadRequest()
+                    .WithMessage($"Maximum output height / width: {MAX_DIMENSION}.");
             }
 
             // cannot supply absolute and max parameters
@@ -70,9 +83,17 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                 // ABSOLUTE CASES
                 if(command.AbsoluteHeight.HasNonZeroPositiveValue() && !command.AbsoluteWidth.HasNonZeroPositiveValue())
                 {
+                    var newWidth = (int)(command.AbsoluteHeight * image.Ratio);
+                    if(newWidth > MAX_DIMENSION)
+                    {
+                        return CommandResponse
+                            .BadRequest()
+                            .WithMessage($"Resulting width will exceed {MAX_DIMENSION}: Aborting");
+                    }
+
                     image.Resize(
                         command.AbsoluteHeight.Value,
-                        (int)(command.AbsoluteHeight * image.Ratio));
+                        newWidth);
                 }
                 else if(command.AbsoluteHeight.HasNonZeroPositiveValue() && command.AbsoluteWidth.HasNonZeroPositiveValue())
                 {
@@ -82,8 +103,16 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                 }
                 else if(command.AbsoluteWidth.HasNonZeroPositiveValue()) // command.AbsoluteHeight is not supplied
                 {
+                    var newHeight = (int)(command.AbsoluteWidth / image.Ratio);
+                    if (newHeight > MAX_DIMENSION)
+                    {
+                        return CommandResponse
+                            .BadRequest()
+                            .WithMessage($"Resulting height will exceed {MAX_DIMENSION}: Aborting");
+                    }
+
                     image.Resize(
-                        (int)(command.AbsoluteWidth / image.Ratio),
+                        newHeight,
                         command.AbsoluteWidth.Value);
                 }
 
@@ -107,15 +136,31 @@ namespace Logopolis.ImageTools.ImageProcessing.Service.CommandServices.ResizeIma
                 }
                 else if(command.MaxWidth.HasNonZeroPositiveValue()) // command.MaxHeight is not supplied
                 {
+                    var newHeight = (int)(command.MaxWidth.Value / image.Ratio);
+                    if (newHeight > MAX_DIMENSION)
+                    {
+                        return CommandResponse
+                            .BadRequest()
+                            .WithMessage($"Resulting height will exceed {MAX_DIMENSION}: Aborting");
+                    }
+
                     image.Resize(
-                        (int)(command.MaxWidth.Value / image.Ratio),
+                        newHeight,
                         command.MaxWidth.Value);
                 }
                 else if(command.MaxHeight.HasNonZeroPositiveValue()) // command.MaxWidth is not supplied
                 {
+                    var newWidth = (int)(command.MaxHeight.Value * image.Ratio);
+                    if (newWidth > MAX_DIMENSION)
+                    {
+                        return CommandResponse
+                            .BadRequest()
+                            .WithMessage($"Resulting width will exceed {MAX_DIMENSION}: Aborting");
+                    }
+
                     image.Resize(
                         command.MaxHeight.Value,
-                        (int)(command.MaxHeight.Value * image.Ratio));
+                        newWidth);
                 }
 
                 return CommandResponse.Stream(
