@@ -51,5 +51,33 @@ namespace Logopolis.ImageTools.Api.Controllers
             var response = _resizeImageCommandService.Execute(command);
             return response.ToActionResult(this);
         }
+
+        [HttpPost]
+        [Route("image/thumbnail")]
+        public IActionResult Thumbnail(
+            [FromForm] int height,
+            [FromForm] int width,
+            [FromForm] IFormFile image)
+        {
+            if (image == null)
+            {
+                return CommandResponse
+                    .BadRequest()
+                    .WithMessage("Please supply image file")
+                    .ToActionResult(this);
+            }
+            using var fileStream = image.OpenReadStream();
+
+            var command = new ResizeImageCommand
+            {
+                AbsoluteHeight = height,
+                AbsoluteWidth = width,
+                Crop = true,
+                Image = fileStream
+            };
+
+            var response = _resizeImageCommandService.Execute(command);
+            return response.ToActionResult(this);
+        }
     }
 }

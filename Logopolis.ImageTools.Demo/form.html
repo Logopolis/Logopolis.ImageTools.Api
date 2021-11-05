@@ -4,6 +4,7 @@
     </head>
 <body>
     <h1>ImageTools Demo</h1>
+    <h2>Resize Form</h2>
     <form action="http://localhost:51920/image/resize" method="POST" enctype="multipart/form-data">
         <div>
             <label for="maxWidth">Max Width</label>
@@ -28,6 +29,22 @@
                 <option value="true">Yes</option>
                 <option value="false">No</option>
             </select>
+        </div>
+        <div>
+            <label for="image">Image</label>
+            <input id="image" type="file" name="image" />
+        </div>
+        <button type="submit">Send to Api</button>
+    </form>
+    <h2>Thumbnail Form</h2>
+    <form action="http://localhost:51920/image/thumbnail" method="POST" enctype="multipart/form-data">
+        <div>
+            <label for="width">Width</label>
+            <input id="width" name="width" type="number" />
+        </div>
+        <div>
+            <label for="height">Height</label>
+            <input id="height" name="height" type="number" />
         </div>
         <div>
             <label for="image">Image</label>
